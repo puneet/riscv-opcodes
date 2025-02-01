@@ -1,28 +1,28 @@
-fmadd.h   rd rs1 rs2 rs3 rm 26..25=2 6..0=0x43
-fmsub.h   rd rs1 rs2 rs3 rm 26..25=2 6..0=0x47
-fnmsub.h  rd rs1 rs2 rs3 rm 26..25=2 6..0=0x4B
-fnmadd.h  rd rs1 rs2 rs3 rm 26..25=2 6..0=0x4F
-fadd.h    rd rs1 rs2      31..27=0x00 rm       26..25=2 6..0=0x53
-fsub.h    rd rs1 rs2      31..27=0x01 rm       26..25=2 6..0=0x53
-fmul.h    rd rs1 rs2      31..27=0x02 rm       26..25=2 6..0=0x53
-fdiv.h    rd rs1 rs2      31..27=0x03 rm       26..25=2 6..0=0x53
-fsqrt.h   rd rs1 24..20=0 31..27=0x0B rm       26..25=2 6..0=0x53
-fsgnj.h   rd rs1 rs2      31..27=0x04 14..12=0 26..25=2 6..0=0x53
-fsgnjn.h  rd rs1 rs2      31..27=0x04 14..12=1 26..25=2 6..0=0x53
-fsgnjx.h  rd rs1 rs2      31..27=0x04 14..12=2 26..25=2 6..0=0x53
-fmin.h    rd rs1 rs2      31..27=0x05 14..12=0 26..25=2 6..0=0x53
-fmax.h    rd rs1 rs2      31..27=0x05 14..12=1 26..25=2 6..0=0x53
+fmadd.h   rd rs1 rs2 rs3 rm 26..25=2 opcode=0x43
+fmsub.h   rd rs1 rs2 rs3 rm 26..25=2 opcode=0x47
+fnmsub.h  rd rs1 rs2 rs3 rm 26..25=2 opcode=0x4B
+fnmadd.h  rd rs1 rs2 rs3 rm 26..25=2 opcode=0x4F
+fadd.h    rd rs1 rs2      31..27=0x00 rm       26..25=2 opcode=0x53
+fsub.h    rd rs1 rs2      31..27=0x01 rm       26..25=2 opcode=0x53
+fmul.h    rd rs1 rs2      31..27=0x02 rm       26..25=2 opcode=0x53
+fdiv.h    rd rs1 rs2      31..27=0x03 rm       26..25=2 opcode=0x53
+fsqrt.h   rd rs1 24..20=0 31..27=0x0B rm       26..25=2 opcode=0x53
+fsgnj.h   rd rs1 rs2      31..27=0x04 14..12=0 26..25=2 opcode=0x53
+fsgnjn.h  rd rs1 rs2      31..27=0x04 14..12=1 26..25=2 opcode=0x53
+fsgnjx.h  rd rs1 rs2      31..27=0x04 14..12=2 26..25=2 opcode=0x53
+fmin.h    rd rs1 rs2      31..27=0x05 14..12=0 26..25=2 opcode=0x53
+fmax.h    rd rs1 rs2      31..27=0x05 14..12=1 26..25=2 opcode=0x53
 
-feq.h     rd rs1 rs2      31..27=0x14 14..12=2 26..25=2 6..0=0x53
-flt.h     rd rs1 rs2      31..27=0x14 14..12=1 26..25=2 6..0=0x53
-fle.h     rd rs1 rs2      31..27=0x14 14..12=0 26..25=2 6..0=0x53
-fclass.h  rd rs1 24..20=0 31..27=0x1C 14..12=1 26..25=2 6..0=0x53
-fcvt.w.h  rd rs1 24..20=0 31..27=0x18 rm       26..25=2 6..0=0x53
-fcvt.wu.h rd rs1 24..20=1 31..27=0x18 rm       26..25=2 6..0=0x53
-fcvt.h.w  rd rs1 24..20=0 31..27=0x1A rm       26..25=2 6..0=0x53
-fcvt.h.wu rd rs1 24..20=1 31..27=0x1A rm       26..25=2 6..0=0x53
+feq.h     rd rs1 rs2      31..27=0x14 14..12=2 26..25=2 opcode=0x53
+flt.h     rd rs1 rs2      31..27=0x14 14..12=1 26..25=2 opcode=0x53
+fle.h     rd rs1 rs2      31..27=0x14 14..12=0 26..25=2 opcode=0x53
+fclass.h  rd rs1 24..20=0 31..27=0x1C 14..12=1 26..25=2 opcode=0x53
+fcvt.w.h  rd rs1 24..20=0 31..27=0x18 rm       26..25=2 opcode=0x53
+fcvt.wu.h rd rs1 24..20=1 31..27=0x18 rm       26..25=2 opcode=0x53
+fcvt.h.w  rd rs1 24..20=0 31..27=0x1A rm       26..25=2 opcode=0x53
+fcvt.h.wu rd rs1 24..20=1 31..27=0x1A rm       26..25=2 opcode=0x53
 
 #pseudoinstructions
-$pseudo_op rv_zfh::fsgnj.h  fmv.h  rd rs1 rs2=rs1 31..27=0x04 14..12=0 26..25=2 6..0=0x53
-$pseudo_op rv_zfh::fsgnjx.h fabs.h rd rs1 rs2=rs1 31..27=0x04 14..12=2 26..25=2 6..0=0x53
-$pseudo_op rv_zfh::fsgnjn.h fneg.h rd rs1 rs2=rs1 31..27=0x04 14..12=1 26..25=2 6..0=0x53
+$pseudo_op rv_zfh::fsgnj.h  fmv.h  rd rs1 rs2=rs1 31..27=0x04 14..12=0 26..25=2 opcode=0x53
+$pseudo_op rv_zfh::fsgnjx.h fabs.h rd rs1 rs2=rs1 31..27=0x04 14..12=2 26..25=2 opcode=0x53
+$pseudo_op rv_zfh::fsgnjn.h fneg.h rd rs1 rs2=rs1 31..27=0x04 14..12=1 26..25=2 opcode=0x53
