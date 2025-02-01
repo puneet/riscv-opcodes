@@ -24,6 +24,7 @@ def generate_extensions(
     extensions: list[str],
     include_pseudo: bool,
     include_fixed_fields: bool,
+    include_orig_instr_field: bool,
     c: bool,
     chisel: bool,
     spinalhdl: bool,
@@ -34,7 +35,7 @@ def generate_extensions(
     svg: bool,
     warn_overlap: bool = False,
 ):
-    instr_dict = create_inst_dict(extensions, include_fixed_fields, include_pseudo, warn_overlap=warn_overlap)
+    instr_dict = create_inst_dict(extensions, include_fixed_fields, include_orig_instr_field, include_pseudo, warn_overlap=warn_overlap)
     instr_dict = dict(sorted(instr_dict.items()))
     instr_dict_with_segment = add_segmented_vls_insn(instr_dict)
 
@@ -45,6 +46,7 @@ def generate_extensions(
         instr_dict_c = create_inst_dict(
             extensions,
             include_fixed_fields,
+            include_orig_instr_field,
             False,
             include_pseudo_ops=emitted_pseudo_ops,
             warn_overlap=warn_overlap,
@@ -92,6 +94,9 @@ def main():
     parser.add_argument(
         "-fixed_fields", action="store_true", help="Include Fixed Fields in the generated Json File"
     )
+    parser.add_argument(
+        "-orig_instr", action="store_true", help="Include Original Instruction Name for Pseudo Instructions"
+    )
     parser.add_argument("-c", action="store_true", help="Generate output for C")
     parser.add_argument(
         "-chisel", action="store_true", help="Generate output for Chisel"
@@ -125,6 +130,7 @@ def main():
         args.extensions,
         args.pseudo,
         args.fixed_fields,
+        args.orig_instr,
         args.c,
         args.chisel,
         args.spinalhdl,
