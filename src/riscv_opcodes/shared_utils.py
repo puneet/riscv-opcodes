@@ -10,6 +10,7 @@ from typing import Dict, NoReturn, Optional, TypedDict
 
 from .constants import (
     arg_lut,
+    fixed_args,
     fixed_ranges,
     imported_regex,
     overlapping_extensions,
@@ -25,6 +26,7 @@ LOG_LEVEL = logging.INFO
 pretty_printer = pprint.PrettyPrinter(indent=2)
 logging.basicConfig(level=LOG_LEVEL, format=LOG_FORMAT)
 
+include_fixed_args = False
 
 # Log an error message
 def log_and_exit(message: str) -> NoReturn:
@@ -83,6 +85,22 @@ def update_encoding_for_fixed_range(
         check_overlapping_bits(encoding, ind, line)
         bit = str((entry_value >> (ind - lsb)) & 1)
         encoding[31 - ind] = bit
+
+
+# Process fixed args patterns
+def process_fixed_args(remaining: str, encoding: "list[str]", line: str):
+    """Process fixed bit ranges in the encoding."""
+    args = []
+    for arg, entry in fixed_args.findall(remaining):
+        args.append(arg)
+        msb, lsb = arg_lut[arg]
+        entry_value = int(entry, 0)
+
+        # Validate bit range and entry value
+        validate_bit_range(msb, lsb, entry_value, line)
+        update_encoding_for_fixed_range(encoding, msb, lsb, entry_value, line)
+
+    return args, fixed_args.sub(" ", remaining)
 
 
 # Process fixed bit patterns
@@ -168,7 +186,9 @@ InstrDict = Dict[str, SingleInstr]
 
 
 # Processing main function for a line in the encoding file
-def process_enc_line(line: str, ext: str, orig_inst: bool = False) -> "tuple[str, SingleInstr]":
+def process_enc_line(line: str, ext: str,
+                     orig_inst: bool = False,
+                     fixed_args: bool = False) -> "tuple[str, SingleInstr]":
     """
     This function processes each line of the encoding files (rv*). As part of
     the processing, the function ensures that the encoding is legal through the
@@ -198,6 +218,9 @@ def process_enc_line(line: str, ext: str, orig_inst: bool = False) -> "tuple[str
     # Parse the instruction line
     name, remaining = parse_instruction_line(line)
 
+    # Process fixed args
+    fixed_args, remaining = process_fixed_args(remaining, encoding, line)
+
     # Process fixed ranges
     remaining = process_fixed_ranges(remaining, encoding, line)
 
@@ -213,24 +236,29 @@ def process_enc_line(line: str, ext: str, orig_inst: bool = False) -> "tuple[str
 
     check_arg_lut(args, encoding_args, name)
 
-    # Return single_dict
+    is_compressed = (encoding_args[31] != "1") or (encoding_args[30] != "1")
+    
+    for ind, enc in enumerate(encoding_args):
+        if ((not is_compressed) or (ind > 15)) and enc == "-":
+            log_and_exit(
+                f'{line.split(" ")[0]:<10} {is_compressed} has {31 - ind} bit which is unused'
+            )
+
+    properties = {
+        "encoding": "".join(encoding),
+        "variable_fields": args,
+        "extension": [os.path.basename(ext)],
+        "match": match,
+        "mask": mask,
+    }
+
+    if (include_fixed_args):
+        properties["fixed_fields"] = fixed_args
+
     if (orig_inst):
-        return name, {
-            "encoding": "".join(encoding),
-            "variable_fields": args,
-            "extension": [os.path.basename(ext)],
-            "match": match,
-            "mask": mask,
-            "orig_inst": orig_inst,
-        }
-    else:
-        return name, {
-            "encoding": "".join(encoding),
-            "variable_fields": args,
-            "extension": [os.path.basename(ext)],
-            "match": match,
-            "mask": mask,
-        }
+        properties["orig_inst"] = orig_inst
+
+    return name, properties
 
 
 # Extract ISA Type
@@ -556,6 +584,7 @@ def validate_instruction_in_extension(
 # Construct a dictionary of instructions filtered by specified criteria
 def create_inst_dict(
     file_filter: "list[str]",
+    include_fixed_fields: bool = False,
     include_pseudo: bool = False,
     include_pseudo_ops: "Optional[list[str]]" = None,
     warn_overlap: bool = False,
