@@ -68,6 +68,8 @@
 "c_uimm8hi", 12, 10
 "c_uimm9lo", 6, 5
 "c_uimm9hi", 12, 10
+"c_shamthi", 12, 12
+"c_shamtlo", 6, 2
 "c_nzimm6lo", 6, 2
 "c_nzimm6hi", 12, 12
 "c_imm6lo", 6, 2
