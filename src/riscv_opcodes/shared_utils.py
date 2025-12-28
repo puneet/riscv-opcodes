@@ -243,7 +243,7 @@ def process_enc_line(line: str, ext: str,
     for ind, enc in enumerate(encoding_args):
         if ((not is_compressed) or (ind > 15)) and enc == "-":
             log_and_exit(
-                f'{line.split(" ")[0]:<10} {is_compressed} has {31 - ind} bit which is unused'
+                f'{ext}::{line.split(" ")[0]:<10}: Bit {31 - ind} is unused'
             )
 
     properties = {
