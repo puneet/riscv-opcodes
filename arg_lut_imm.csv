@@ -11,3 +11,11 @@
 "zimm11", 30, 20
 "zimm6hi", 26, 26
 "zimm6lo", 19, 15
+"p_imm10", 24, 15
+"p_imm8", 23, 16
+"p_w_uimm3", 22, 20
+"p_w_uimm4", 23, 20
+"p_w_uimm5", 24, 20
+"p_w_uimm6", 24, 20
+"shamtw", 24, 20
+"shamtd", 25, 20
