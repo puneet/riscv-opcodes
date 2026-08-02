@@ -342,7 +342,7 @@ def make_ext_latex_table(
         # for all extensions list in ext_list, create a dictionary of
         # instructions associated with those extensions.
         for e in ext_list:
-            instr_dict.update(create_inst_dict(["rv" + e], include_pseudo))
+            instr_dict.update(create_inst_dict(["rv" + e], False, False, include_pseudo))
 
         # if filter_list is not empty then use that as the official set of
         # instructions that need to be dumped into the latex table
